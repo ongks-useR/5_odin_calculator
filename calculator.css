@@ -1,0 +1,31 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    border: 2px dotted black;
+    width: 320px;
+    height: 560px;
+}
+
+/* Display section */
+#display {
+    height: 160px;
+    box-sizing: border-box;
+}
+
+/* Keypad section */
+#keypad {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#keypad div {
+    border: 1px solid black;
+    box-sizing: border-box;
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    margin: 5px;
+}
