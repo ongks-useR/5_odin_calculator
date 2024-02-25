@@ -1,4 +1,6 @@
-let firstNumber = []
+let first = []
+let second = []
+let action = ''
 
 const numbers = document.querySelectorAll('.number');
 numbers.forEach(
@@ -6,47 +8,115 @@ numbers.forEach(
         'click',
         e => {
             const num = e.target.getAttribute('data');
-            firstNumber.push(num)
 
-            const element = document.createElement('span');
-            element.textContent = num;
+            if (!action) {
+                first.push(num)
 
-            const display = document.querySelector('#display');
-            display.appendChild(element);
+                const element = document.createElement('span');
+                element.textContent = num;
+
+                const display = document.querySelector('#display');
+                display.appendChild(element);
+            }
+            else {
+                second.push(num)
+
+                const element = document.createElement('span');
+                element.textContent = num;
+
+                const display = document.querySelector('#display');
+                display.appendChild(element);
+            }
         }
     )
 )
 
 const operators = document.querySelectorAll('.operator');
-operators.forEach(
-    operator => operator.addEventListener(
-        'click',
-        e => {
-            const action = e.target.getAttribute('data');
+operators.forEach(operator => operator.addEventListener(
+    'click',
+    e => {
+        const selected = e.target.getAttribute('data');
+        const display = document.querySelector('#display');
 
-            if (action === 'add') {
+        switch (selected) {
+            case 'clear':
 
-            }
-            else if (action === 'subtract') {
+                display.textContent = '';
+                second.splice(0, second.length);
+                first.splice(0, first.length);
+                action = '';
+                break;
 
-            }
-            else if (action === 'multiply') {
+            case 'delete':
 
-            }
-            else if (action === 'divide') {
+                const lastChild = display.lastElementChild;
+                const lastItem = lastChild.textContent;
 
-            }
-            else if (action === 'clear') {
-                display.textContent = ''
-                firstNumber.splice(0, firstNumber.length);
-            }
-            else if (action === 'delete') {
-                const display = document.querySelector('#display');
-                display.removeChild(display.lastElementChild)
-                firstNumber.pop()
-            }
+                display.removeChild(lastChild);
+
+                if (['+', '-', 'X', '/'].includes(lastItem)) {
+                    action = '';
+                }
+                else {
+                    if (second.length !== 0) { second.pop(); }
+                    else { first.pop(); }
+                }
+                break;
+
+            case '+':
+
+                if (first.length !== 0) {
+                    if (!(['+', '-', 'X', '/'].includes(first[first.length - 1]))) {
+                        if (!action) {
+                            const element = document.createElement('span');
+                            element.textContent = selected;
+
+                            display.appendChild(element);
+                            action = selected;
+                        }
+                        else {
+                            console.log(`Selection ${selected} not allowed`)
+                        }
+                    }
+                    else {
+                        console.log(`Selection ${selected} not allowed`)
+                    }
+                }
+                else {
+                    console.log(`Selection ${selected} not allowed`)
+                }
+                break;
+
+            case '-':
+
+                if (first.length === 0) {
+                    const element = document.createElement('span');
+                    element.textContent = '-';
+
+                    display.appendChild(element);
+                    first.push(selected);
+                }
+                else {
+                    if (!(['+', '-', 'X', '/'].includes(first[first.length - 1]))) {
+                        if (!action) {
+                            const element = document.createElement('span');
+                            element.textContent = selected;
+
+                            display.appendChild(element);
+                            action = selected;
+                        }
+                        else {
+                            console.log(`Selection ${selected} not allowed`)
+                        }
+                    }
+                    else {
+                        console.log(`Selection ${selected} not allowed`)
+                    }
+                }
+                break;
         }
-    )
+    }
+)
 )
 
 const others = document.querySelectorAll('.other');
