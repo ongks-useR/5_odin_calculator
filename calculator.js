@@ -10,22 +10,48 @@ numbers.forEach(
             const num = e.target.getAttribute('data');
 
             if (!action) {
-                first.push(num)
+                if ((first.length === 1) & (first[0] === '0')) {
+                    if (num === '0') {
+                        console.log(`Selection ${num} is not allowed`)
+                    }
+                    else {
+                        first[0] = num;
 
-                const element = document.createElement('span');
-                element.textContent = num;
+                        const display = document.querySelector('#display');
+                        display.lastElementChild.textContent = num;
+                    }
+                }
+                else {
+                    first.push(num)
 
-                const display = document.querySelector('#display');
-                display.appendChild(element);
+                    const element = document.createElement('span');
+                    element.textContent = num;
+
+                    const display = document.querySelector('#display');
+                    display.appendChild(element);
+                }
             }
             else {
-                second.push(num)
+                if ((second.length === 1) & (second[0] === '0')) {
+                    if (num === '0') {
+                        console.log(`Selection ${num} is not allowed`)
+                    }
+                    else {
+                        second[0] = num;
 
-                const element = document.createElement('span');
-                element.textContent = num;
+                        const display = document.querySelector('#display');
+                        display.lastElementChild.textContent = num;
+                    }
+                }
+                else {
+                    second.push(num)
 
-                const display = document.querySelector('#display');
-                display.appendChild(element);
+                    const element = document.createElement('span');
+                    element.textContent = num;
+
+                    const display = document.querySelector('#display');
+                    display.appendChild(element);
+                }
             }
         }
     )
@@ -66,17 +92,12 @@ operators.forEach(operator => operator.addEventListener(
             case '+':
 
                 if (first.length !== 0) {
-                    if (!(['+', '-', 'X', '/'].includes(first[first.length - 1]))) {
-                        if (!action) {
-                            const element = document.createElement('span');
-                            element.textContent = selected;
+                    if (!action) {
+                        const element = document.createElement('span');
+                        element.textContent = selected;
 
-                            display.appendChild(element);
-                            action = selected;
-                        }
-                        else {
-                            console.log(`Selection ${selected} not allowed`)
-                        }
+                        display.appendChild(element);
+                        action = selected;
                     }
                     else {
                         console.log(`Selection ${selected} not allowed`)
@@ -97,6 +118,7 @@ operators.forEach(operator => operator.addEventListener(
                     first.push(selected);
                 }
                 else {
+                    // To prevent user input "-" followed by "-"
                     if (!(['+', '-', 'X', '/'].includes(first[first.length - 1]))) {
                         if (!action) {
                             const element = document.createElement('span');
@@ -112,6 +134,44 @@ operators.forEach(operator => operator.addEventListener(
                     else {
                         console.log(`Selection ${selected} not allowed`)
                     }
+                }
+                break;
+
+            case 'X':
+
+                if (first.length !== 0) {
+                    if (!action) {
+                        const element = document.createElement('span');
+                        element.textContent = selected;
+
+                        display.appendChild(element);
+                        action = selected;
+                    }
+                    else {
+                        console.log(`Selection ${selected} not allowed`)
+                    }
+                }
+                else {
+                    console.log(`Selection ${selected} not allowed`)
+                }
+                break;
+
+            case '/':
+
+                if (first.length !== 0) {
+                    if (!action) {
+                        const element = document.createElement('span');
+                        element.textContent = selected;
+
+                        display.appendChild(element);
+                        action = selected;
+                    }
+                    else {
+                        console.log(`Selection ${selected} not allowed`)
+                    }
+                }
+                else {
+                    console.log(`Selection ${selected} not allowed`)
                 }
                 break;
         }
