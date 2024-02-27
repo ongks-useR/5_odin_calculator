@@ -52,20 +52,63 @@ numbers.forEach(
             const num = e.target.getAttribute('data');
             const display = document.querySelector('#display');
 
-            if (!action) {
-                if (first[0] !== '-') {
-                    if ((first.length === 1) & (first[0] === '0')) {
-                        if (num === '0') {
-                            console.log(`Selection ${num} is not allowed`)
+            if (!calculated) {
+                if (!action) {
+                    if (first[0] !== '-') {
+                        if ((first.length === 1) & (first[0] === '0')) {
+                            if (num === '0') {
+                                alert(`Selection ${num} is not allowed`)
+                            }
+                            else {
+                                first[0] = num;
+
+                                display.lastElementChild.textContent = num;
+                            }
                         }
                         else {
-                            first[0] = num;
+                            first.push(num)
+
+                            const element = document.createElement('span');
+                            element.textContent = num;
+
+                            display.appendChild(element);
+                        }
+                    }
+                    else {
+                        if ((first.length === 2) & (first[1] === '0')) {
+                            if (num === '0') {
+                                alert(`Selection ${num} is not allowed`)
+                            }
+                            else {
+                                first[1] = num;
+
+                                display.lastElementChild.textContent = num;
+                            }
+                        }
+                        else {
+                            first.push(num)
+
+                            const element = document.createElement('span');
+                            element.textContent = num;
+
+                            display.appendChild(element);
+                        }
+                    }
+
+                }
+                else {
+                    if ((second.length === 1) & (second[0] === '0')) {
+                        if (num === '0') {
+                            alert(`Selection ${num} is not allowed`)
+                        }
+                        else {
+                            second[0] = num;
 
                             display.lastElementChild.textContent = num;
                         }
                     }
                     else {
-                        first.push(num)
+                        second.push(num)
 
                         const element = document.createElement('span');
                         element.textContent = num;
@@ -73,48 +116,8 @@ numbers.forEach(
                         display.appendChild(element);
                     }
                 }
-                else {
-                    if ((first.length === 2) & (first[1] === '0')) {
-                        if (num === '0') {
-                            console.log(`Selection ${num} is not allowed`)
-                        }
-                        else {
-                            first[1] = num;
-
-                            display.lastElementChild.textContent = num;
-                        }
-                    }
-                    else {
-                        first.push(num)
-
-                        const element = document.createElement('span');
-                        element.textContent = num;
-
-                        display.appendChild(element);
-                    }
-                }
-
             }
-            else {
-                if ((second.length === 1) & (second[0] === '0')) {
-                    if (num === '0') {
-                        console.log(`Selection ${num} is not allowed`)
-                    }
-                    else {
-                        second[0] = num;
-
-                        display.lastElementChild.textContent = num;
-                    }
-                }
-                else {
-                    second.push(num)
-
-                    const element = document.createElement('span');
-                    element.textContent = num;
-
-                    display.appendChild(element);
-                }
-            }
+            else { alert(`selected ${num} not allowed`) }
         }
     )
 )
@@ -140,18 +143,28 @@ buttons.forEach(button => button.addEventListener(
 
             case 'delete':
 
-                const lastChild = display.lastElementChild;
-                const lastItem = lastChild.textContent;
+                // warn user if nothing to delete
+                if (isNaN(display.lastElementChild)) {
+                    const lastChild = display.lastElementChild;
+                    const lastItem = lastChild.textContent;
 
-                display.removeChild(lastChild);
+                    // After calculation is done, disable this button
+                    if (!calculated) {
 
-                if (['+', '-', 'X', '/'].includes(lastItem)) {
-                    action = '';
+                        display.removeChild(lastChild);
+
+                        if (['+', '-', 'X', '/'].includes(lastItem)) {
+                            action = '';
+                        }
+                        else {
+                            if (second.length !== 0) { second.pop(); }
+                            else { first.pop(); }
+                        }
+                    }
+                    else { alert(`Selection ${selected} not allowed`) }
                 }
-                else {
-                    if (second.length !== 0) { second.pop(); }
-                    else { first.pop(); }
-                }
+                else { alert(`Selection ${selected} not allowed. Nothing to delete.`) }
+
                 break;
 
             case '+':
@@ -166,15 +179,15 @@ buttons.forEach(button => button.addEventListener(
                             action = selected;
                         }
                         else {
-                            console.log(`Selection ${selected} not allowed`)
+                            alert(`Selection ${selected} not allowed`)
                         }
                     }
                     else {
-                        console.log(`Selection ${selected} not allowed`)
+                        alert(`Selection ${selected} not allowed`)
                     }
                 }
                 else {
-                    console.log(`Selection ${selected} not allowed`)
+                    alert(`Selection ${selected} not allowed`)
                 }
                 break;
 
@@ -198,11 +211,11 @@ buttons.forEach(button => button.addEventListener(
                             action = selected;
                         }
                         else {
-                            console.log(`Selection ${selected} not allowed`)
+                            alert(`Selection ${selected} not allowed`)
                         }
                     }
                     else {
-                        console.log(`Selection ${selected} not allowed`)
+                        alert(`Selection ${selected} not allowed`)
                     }
                 }
                 break;
@@ -219,15 +232,15 @@ buttons.forEach(button => button.addEventListener(
                             action = selected;
                         }
                         else {
-                            console.log(`Selection ${selected} not allowed`)
+                            alert(`Selection ${selected} not allowed`)
                         }
                     }
                     else {
-                        console.log(`Selection ${selected} not allowed`)
+                        alert(`Selection ${selected} not allowed`)
                     }
                 }
                 else {
-                    console.log(`Selection ${selected} not allowed`)
+                    alert(`Selection ${selected} not allowed`)
                 }
                 break;
 
@@ -243,15 +256,15 @@ buttons.forEach(button => button.addEventListener(
                             action = selected;
                         }
                         else {
-                            console.log(`Selection ${selected} not allowed`)
+                            alert(`Selection ${selected} not allowed`)
                         }
                     }
                     else {
-                        console.log(`Selection ${selected} not allowed`)
+                        alert(`Selection ${selected} not allowed`)
                     }
                 }
                 else {
-                    console.log(`Selection ${selected} not allowed`)
+                    alert(`Selection ${selected} not allowed`)
                 }
                 break;
 
@@ -261,9 +274,9 @@ buttons.forEach(button => button.addEventListener(
                     if (!calculated) {
                         operator();
                     }
-                    else { console.log('Calculation is completed.') }
+                    else { alert('Calculation is completed.') }
                 }
-                else { console.log('Failed to do calculation. Missing information!!') }
+                else { alert('Failed to do calculation. Missing information!!') }
 
                 break;
         }
@@ -283,28 +296,15 @@ others.forEach(
             switch (selected) {
                 case '%':
 
-                    console.log(`Selection ${selected} is disabled`);
+                    alert(`Selection ${selected} is disabled`);
+                    break
 
                 case '.':
 
-                    if (!action) {
-                        if (first.length !== 0) {
-                            if (numberCheck.includes(first[0])) {
-                                if (!(selected.includes(first[first.length - 1]))) {
-                                    if (!(first.includes(selected))) {
-                                        first.push(selected);
-
-                                        const element = document.createElement('span');
-                                        element.textContent = selected;
-
-                                        display.appendChild(element);
-                                    }
-                                    else { console.log(`selected ${selected} not allowed`) }
-                                }
-                                else { console.log(`selected ${selected} not allowed`) }
-                            }
-                            else if (['+', '-', 'X', '-'].includes(first[0])) {
-                                if (numberCheck.includes(first[1])) {
+                    if (!calculated) {
+                        if (!action) {
+                            if (first.length !== 0) {
+                                if (numberCheck.includes(first[0])) {
                                     if (!(selected.includes(first[first.length - 1]))) {
                                         if (!(first.includes(selected))) {
                                             first.push(selected);
@@ -314,34 +314,51 @@ others.forEach(
 
                                             display.appendChild(element);
                                         }
-                                        else { console.log(`selected ${selected} not allowed`) }
+                                        else { alert(`selected ${selected} not allowed`) }
                                     }
-                                    else { console.log(`selected ${selected} not allowed`) }
+                                    else { alert(`selected ${selected} not allowed`) }
                                 }
-                                else { console.log(`selected ${selected} not allowed`) }
-                            }
-                            else { console.log(`selected ${selected} not allowed`) }
-                        }
-                        else { console.log(`selected ${selected} not allowed`) }
-                    }
-                    else {
-                        if (second.length !== 0) {
-                            if (!(selected.includes(second[second.length - 1]))) {
-                                if (!(second.includes(selected))) {
-                                    second.push(selected);
+                                else if (['+', '-', 'X', '-'].includes(first[0])) {
+                                    if (numberCheck.includes(first[1])) {
+                                        if (!(selected.includes(first[first.length - 1]))) {
+                                            if (!(first.includes(selected))) {
+                                                first.push(selected);
 
-                                    const element = document.createElement('span');
-                                    element.textContent = selected;
+                                                const element = document.createElement('span');
+                                                element.textContent = selected;
 
-                                    display.appendChild(element);
+                                                display.appendChild(element);
+                                            }
+                                            else { alert(`selected ${selected} not allowed`) }
+                                        }
+                                        else { alert(`selected ${selected} not allowed`) }
+                                    }
+                                    else { alert(`selected ${selected} not allowed`) }
                                 }
-                                else { console.log(`selected ${selected} not allowed`) }
+                                else { alert(`selected ${selected} not allowed`) }
                             }
-                            else { console.log(`selected ${selected} not allowed`) }
+                            else { alert(`selected ${selected} not allowed`) }
                         }
-                        else { console.log(`selected ${selected} not allowed`) }
-                    }
+                        else {
+                            if (second.length !== 0) {
+                                if (!(selected.includes(second[second.length - 1]))) {
+                                    if (!(second.includes(selected))) {
+                                        second.push(selected);
 
+                                        const element = document.createElement('span');
+                                        element.textContent = selected;
+
+                                        display.appendChild(element);
+                                    }
+                                    else { alert(`selected ${selected} not allowed`) }
+                                }
+                                else { alert(`selected ${selected} not allowed`) }
+                            }
+                            else { alert(`selected ${selected} not allowed`) }
+                        }
+                    }
+                    else { alert(`selected ${selected} not allowed`) }
+                    break
             }
         }
     )
