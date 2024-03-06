@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Courier New', Courier, monospace;
-    font-size: 40px;
+    font-size: 36px;
 }
 
 #container {
@@ -24,10 +24,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: right;
-}
-
-span {
-    margin: 2px;
 }
 
 /* Keypad section */
@@ -52,6 +48,8 @@ span {
     font-weight: bold;
     background-color: grey;
     font-size: 20px;
+    /* cursor turn to pointer when hover to button */
+    cursor: pointer;
 }
 
 .operator {
