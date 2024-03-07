@@ -215,10 +215,13 @@ buttons.forEach(button => button.addEventListener(
 
                         if (textIndex.length !== 0) {
                             if (numeric.includes(displayText[displayText.length - 1])) {
-                                performCalculation()
-                                calculated = true;
+                                performCalculation(textIndex, displayText)
 
-                                answer.textContent = Math.round(result * 100) / 100
+                                if (result) {
+                                    calculated = true;
+
+                                    answer.textContent = Math.round(result * 100) / 100
+                                }
                             }
                             else { alert('Missing info for calculation') }
                         }
@@ -317,48 +320,43 @@ function mathOperation() {
             return multiply()
             break
         case '/':
-            return divide()
+            // Doesn't proceed if divide by 0
+            if (second !== 0) {
+                return divide()
+            }
+            else {
+                alert('Not allowed to divide 0')
+                return
+            }
             break
     }
 }
 
-function performCalculation() {
-    userInput = Array.from(document.querySelectorAll('#display span'));
-    userInput = userInput.map(input => input.textContent);
+function performCalculation(textIndex, displayText) {
 
-    userInput.forEach(
-        (selected, index) => {
-            if (operators.includes(selected)) {
-                if (index !== 0) {
-                    indexOfOperator.push(index)
-                }
-            }
-        }
-    )
+    const totalOperator = textIndex.length
 
-    const totalOperator = indexOfOperator.length
-
-    indexOfOperator.forEach(
+    textIndex.forEach(
         (item, index) => {
             if (totalOperator === 1) {
-                first = userInput.slice(0, item)
+                first = displayText.slice(0, item)
                 first = parseFloat(first.join(''))
 
-                operator = userInput[item]
+                operator = displayText[item]
 
-                second = userInput.slice(item + 1, userInput.length)
+                second = displayText.slice(item + 1)
                 second = parseFloat(second.join(''))
 
                 result = mathOperation()
             }
             else {
                 if (!result) {
-                    first = userInput.slice(0, item)
+                    first = displayText.slice(0, item)
                     first = parseFloat(first.join(''))
 
-                    operator = userInput[item]
+                    operator = displayText[item]
 
-                    second = userInput.slice(item + 1, indexOfOperator[index + 1])
+                    second = displayText.slice(item + 1, textIndex[index + 1])
                     second = parseFloat(second.join(''))
 
                     result = mathOperation()
@@ -366,9 +364,9 @@ function performCalculation() {
                 else {
                     first = result
 
-                    operator = userInput[item]
+                    operator = displayText[item]
 
-                    second = userInput.slice(item + 1, indexOfOperator[index + 1])
+                    second = displayText.slice(item + 1, textIndex[index + 1])
                     second = parseFloat(second.join(''))
 
                     result = mathOperation()
