@@ -74,12 +74,16 @@ operators.forEach(
                         }
                         else {
                             if ((next.length !== 0) & (numeric.includes(next[next.length - 1]))) {
-                                result = parseFloat(calculate().toFixed(3))
-                                text.textContent = result
-                                current = result.toString()
-                                operator = selected
-                                next = []
-                                result = null
+
+                                calculate()
+
+                                if (result) {
+                                    text.textContent = parseFloat(result.toFixed(4))
+                                    current = result.toFixed(4)
+                                    operator = selected
+                                    next = []
+                                    result = null
+                                }
                             }
                             else { alert('Incomplete information') }
                         }
@@ -100,12 +104,16 @@ operators.forEach(
                         }
                         else {
                             if ((next.length !== 0) & (numeric.includes(next[next.length - 1]))) {
-                                result = parseFloat(calculate().toFixed(3))
-                                text.textContent = result
-                                current = result.toString()
-                                operator = selected
-                                next = []
-                                result = null
+
+                                calculate()
+
+                                if (result) {
+                                    text.textContent = parseFloat(result.toFixed(4))
+                                    current = result.toFixed(4)
+                                    operator = selected
+                                    next = []
+                                    result = null
+                                }
                             }
                             else { alert('Incomplete information') }
                         }
@@ -119,12 +127,16 @@ operators.forEach(
                         }
                         else {
                             if ((next.length !== 0) & (numeric.includes(next[next.length - 1]))) {
-                                result = parseFloat(calculate().toFixed(3))
-                                text.textContent = result
-                                current = result.toString()
-                                operator = selected
-                                next = []
-                                result = null
+
+                                calculate()
+
+                                if (result) {
+                                    text.textContent = parseFloat(result.toFixed(4))
+                                    current = result.toFixed(4)
+                                    operator = selected
+                                    next = []
+                                    result = null
+                                }
                             }
                             else { alert('Incomplete information') }
                         }
@@ -138,24 +150,32 @@ operators.forEach(
                         }
                         else {
                             if ((next.length !== 0) & (numeric.includes(next[next.length - 1]))) {
-                                result = parseFloat(calculate().toFixed(3))
-                                text.textContent = result
-                                current = result.toString()
-                                operator = selected
-                                next = []
-                                result = null
+
+                                calculate()
+
+                                if (result) {
+                                    text.textContent = parseFloat(result.toFixed(4))
+                                    current = result.toFixed(4)
+                                    operator = selected
+                                    next = []
+                                    result = null
+                                }
                             }
                             else { alert('Incomplete information') }
                         }
                         break
                     case '=':
                         if ((next.length !== 0) & (numeric.includes(next[next.length - 1]))) {
-                            result = parseFloat(calculate().toFixed(3))
-                            text.textContent = result
-                            current = result.toString()
-                            operator = null
-                            next = []
-                            result = null
+
+                            calculate()
+
+                            if (result) {
+                                text.textContent = parseFloat(result.toFixed(4))
+                                current = result.toFixed(4)
+                                operator = null
+                                next = []
+                                result = null
+                            }
                         }
                         else { alert('Incomplete information') }
                         break
@@ -253,21 +273,29 @@ function calculate() {
         return current / next
     }
 
-    current = (typeof (current) === 'object') ? parseFloat(current.join('')) : parseFloat(current)
-    next = parseFloat(next.join(''))
-
     switch (operator) {
         case '+':
-            return add()
+            current = (typeof (current) === 'object') ? parseFloat(current.join('')) : parseFloat(current)
+            next = parseFloat(next.join(''))
+            result = add()
             break
         case '-':
-            return subtract()
+            current = (typeof (current) === 'object') ? parseFloat(current.join('')) : parseFloat(current)
+            next = parseFloat(next.join(''))
+            result = subtract()
             break
         case 'X':
-            return multiply()
+            current = (typeof (current) === 'object') ? parseFloat(current.join('')) : parseFloat(current)
+            next = parseFloat(next.join(''))
+            result = multiply()
             break
         case '/':
-            return next !== 0 ? divide() : alert(`Divide by 0 is not allowed`)
+            if (parseFloat(next.join('')) !== 0) {
+                current = (typeof (current) === 'object') ? parseFloat(current.join('')) : parseFloat(current)
+                next = parseFloat(next.join(''))
+                result = divide()
+            }
+            else { alert(`Divide by 0 is not allowed`) }
             break
     }
 }
