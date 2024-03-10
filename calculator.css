@@ -2,22 +2,21 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Courier New', Courier, monospace;
-    font-size: 36px;
+    font-size: 40px;
 }
 
 #container {
     border: 5px solid black;
     width: 320px;
-    height: 560px;
+    height: 490px;
     border-radius: 25px;
     margin: 10px auto;
     background-color: black;
 }
 
 /* Display & result section */
-#display,
-#result {
-    height: 80px;
+#display {
+    height: 90px;
     box-sizing: border-box;
     color: white;
     font-weight: bold;
