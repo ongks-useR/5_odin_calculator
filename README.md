@@ -1,6 +1,9 @@
-# 5_odin_calculator
-Build simple calculator with HTML, CSS &amp; JavaScript
+# 5_odin_calculator  
 
-Project reference: https://www.theodinproject.com/lessons/foundations-calculator
+Project: [Calculator](https://www.theodinproject.com/lessons/foundations-calculator)  
 
-Click here to go to project page: https://ongks-user.github.io/5_odin_calculator/
+Brief Description:  
+--> Build simple calculator with HTML, CSS &amp; JavaScript
+
+
+Click [here](https://ongks-user.github.io/5_odin_calculator/) for completed project page hosted on Github. 
