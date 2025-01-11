@@ -1,57 +1,63 @@
 body {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 40px;
 }
 
 #container {
-    border: 5px solid black;
-    width: 320px;
-    height: 490px;
-    border-radius: 25px;
-    margin: 10px auto;
-    background-color: black;
+    width: 500px;
 }
 
-/* Display & result section */
-#display {
-    height: 90px;
-    box-sizing: border-box;
-    color: white;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: right;
+#container > div {
+    margin: 20px auto;
+    width: 350px;
 }
 
-/* Keypad section */
-#keypad {
-    display: flex;
-    flex-wrap: wrap;
-}
 
-.operator,
-.number,
-.other {
-    border: 1px solid black;
-    box-sizing: border-box;
-    width: 70px;
-    height: 70px;
-    border-radius: 10px;
-    margin: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
+.display {
+    height: 40px;
     background-color: grey;
-    font-size: 20px;
-    /* cursor turn to pointer when hover to button */
-    cursor: pointer;
+    color: white;
+    margin: 5px 0;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    column-gap: 2px;
+    padding: 0 10px;
 }
 
-.operator {
-    background-color: rgba(255, 0, 0, 0.62);
-    color: #AED6F1;
+
+.display.operation > span,
+.display.result > span {
+    display: inline-block;
+    font-family: Verdana;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.row {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px 0;
+}
+
+.fa-solid {
+    border: 5px dotted gray;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+svg {
+    height: 50px;
+    width: 50px;
+}
+
+#decimal {
+    font-weight: bold;
+    font-size: 60px;
 }
