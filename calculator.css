@@ -52,6 +52,11 @@ body {
     border-radius: 15px;
 }
 
+/* when cursor hover over the button, button grows by 15% */
+.fa-solid:hover {
+    transform: scale(1.15);
+}
+
 svg {
     height: 50px;
     width: 50px;
