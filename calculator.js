@@ -1,301 +1,286 @@
-let current = []
-let operator = null
-let next = []
-let result = null
 
-const action = ['+', '-', 'X', '/']
-const numeric = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+let firstNumber = [];
+let between = null;
+let secondNumber = [];
+let answer = null;
 
 
-const numbers = Array.from(document.getElementsByClassName('number'))
+/* All numbers: 0 - 9 */
+const numbers = document.querySelectorAll(".number");
+
 numbers.forEach(
-    number => {
-        number.addEventListener(
-            'click',
-            e => {
-                const selected = e.target.getAttribute('data')
-                const text = document.getElementById('display')
+    num => num.addEventListener(
+        'click',
+        function() {
+            const span = document.createElement('span');
 
-                if (!operator) {
-                    if (selected === '0') {
+            span.textContent = this.id;
 
-                        let positive_negative = ((current.length === 1) & (current[current.length - 1] === '0')) | ((current.length === 2) & (current[0] === '-') & (current[current.length - 1] === '0'))
+            const operation = document.querySelector(".display.operation");
+            operation.appendChild(span);
 
-                        if (!positive_negative) {
-                            current.push(selected)
-                            const current_temp = current.join('')
-                            text.textContent = current_temp
-                        }
-                        else { alert(`Selection ${selected} not allowed`) }
+            if (between === null) {
+                firstNumber.push(this.id);
+            }
+            else {
+                secondNumber.push(this.id);
+            }
+        }
+    )
+);
+
+/* The button C that clear everything */
+const restartOperation = document.querySelector(".fa-c");
+
+restartOperation.addEventListener(
+    'click',
+    function() {
+
+        const operation = document.querySelector(".display.operation");
+        operation.textContent = "";
+
+        const result = document.querySelector(".display.result");
+        result.textContent = "";
+
+        firstNumber = [];
+        between = null;
+        secondNumber = [];
+        answer = null;
+    }
+);
+
+
+/* The delete button: delete the last number on the display */
+const deleteNumber = document.querySelector(".fa-delete-left");
+
+deleteNumber.addEventListener(
+    'click',
+    function() {
+        const operation = document.querySelector(".display.operation");
+        operation.lastChild.remove();
+
+        if (secondNumber.length !== 0) {
+            secondNumber.pop()
+        }
+        else if (between !== null) {
+            between = null
+        }
+        else if (firstNumber.length !== 0) {
+            firstNumber.pop()
+        }
+    }
+);
+
+
+/* PLUS / MINUS / DIVIDE / MULTIPLY operator */
+const operators = document.querySelectorAll(".operator");
+
+operators.forEach(
+    operator => { operator.addEventListener(
+        'click',
+        function() {
+
+            if (firstNumber.length !== 0 && between === null) {
+                const operation = document.querySelector(".display.operation");
+            
+                const span = document.createElement('span');
+                span.textContent = this.id;
+    
+                operation.appendChild(span);
+
+                between = this.id;
+            }
+            else if (firstNumber.length !== 0 && between !== null && secondNumber.length !== 0) {
+
+                let firstValue = firstNumber.reduce((total, current) => {
+                    if (current !== "%") {
+                        total = total + current
                     }
                     else {
-                        current.push(selected)
-                        const current_temp = current.join('')
-                        text.textContent = current_temp
+                        total = Number(total) / 100
                     }
+    
+                    return total;
+                }, "");
+    
+                let secondValue = secondNumber.reduce((total, current) => {
+                    if (current !== "%") {
+                        total = total + current
+                    }
+                    else {
+                        total = Number(total) / 100
+                    }
+    
+                    return total;
+                }, "");
+
+                answer = operate(firstValue, between, secondValue);
+
+                firstNumber = [];
+                between = "";
+                secondNumber = [];
+
+                const temporary = document.querySelector(".display.operation");
+                const a = document.createElement('span'); // firstNumber
+                a.textContent = String(answer);
+
+                const b = document.createElement('span'); // between
+                b.textContent = this.id;
+
+                temporary.textContent = "";
+                temporary.appendChild(a);
+                temporary.appendChild(b);
+
+                firstNumber.push(String(answer));
+                between = this.id;
+            }
+            else {
+                alert("Not Allowed !!")
+                console.log("Not allowed !!")
+            }
+        }
+    ) }
+);
+
+
+/* Percent sign */
+const percent = document.querySelector(".fa-percent");
+
+percent.addEventListener(
+    'click',
+    function() {
+
+        if (firstNumber.length !== 0 && !firstNumber.includes(this.id)) {
+            const operation = document.querySelector(".display.operation");
+            
+            const span = document.createElement('span');
+            span.textContent = this.id;
+    
+            operation.appendChild(span);
+            firstNumber.push(this.id);
+        }
+        else if (secondNumber.length !== 0 && !secondNumber.includes(this.id)) {
+            const operation = document.querySelector(".display.operation");
+            
+            const span = document.createElement('span');
+            span.textContent = this.id;
+    
+            operation.appendChild(span);
+            secondNumber.push(this.id);
+        }
+        else {
+            alert("Not Allowed !!")
+        }
+
+    }
+);
+
+
+/* Mathematics decimal point separator */
+const decimal = document.querySelector(".fa-dot");
+
+decimal.addEventListener(
+    'click',
+    function() {
+
+        const operation = document.querySelector(".display.operation");
+
+        if (firstNumber.length !== 0 && !firstNumber.includes(this.id)) {
+         
+            const span = document.createElement('span');
+            span.textContent = this.id;
+    
+            operation.appendChild(span);
+            firstNumber.push(this.id);
+        }
+        else if (secondNumber.length !== 0 && !secondNumber.includes(this.id)) {
+            const span = document.createElement('span');
+            span.textContent = this.id;
+    
+            operation.appendChild(span);
+            secondNumber.push(this.id);
+        }
+        else {
+            alert("Not Allowed !!")
+            console.log("Not Allowed !!")
+        }
+    }
+);
+
+
+/* The EQUAL button */
+const calculate = document.querySelector(".fa-equals");
+
+function operate(first, operator, second) {
+
+    let c = null;
+
+    if (operator === '+') {
+        c = Number(first) + Number(second)
+    }
+    else if (operator === '−') {
+        c = Number(first) - Number(second)
+    }
+    else if (operator === '×') {
+        c = Number(first) * Number(second)
+    }
+    else if (operator === '÷') {
+        
+        if (Number(second) !== 0) {
+            c = Number(first) / Number(second)
+        }
+        else {
+            alert("ERROR: Not allowed to divide by 0 !!")
+            return
+        }
+        
+    }
+
+    return Math.round(c * 100) / 100;
+};
+
+calculate.addEventListener(
+    'click',
+    function() {
+
+        const validation = firstNumber.length !== 0 && between !== null && secondNumber.length !== 0
+
+        if (validation) {
+
+            let firstValue = firstNumber.reduce((total, current) => {
+                if (current !== "%") {
+                    total = total + current
                 }
                 else {
-                    if (selected === '0') {
-                        if (!((next.length === 1) & (next[next.length - 1] === '0'))) {
-                            next.push(selected)
-                            const next_temp = next.join('')
-                            text.textContent = next_temp
-                        }
-                        else { alert(`Selection ${selected} not allowed`) }
-                    }
-                    else {
-                        next.push(selected)
-                        const next_temp = next.join('')
-                        text.textContent = next_temp
-                    }
+                    total = Number(total) / 100
                 }
-            }
-        )
-    }
-)
 
+                return total;
+            }, "");
 
-const operators = Array.from(document.getElementsByClassName('operator'))
-operators.forEach(
-    button => {
-        button.addEventListener(
-            'click',
-            e => {
-                const selected = e.target.getAttribute('data')
-                const text = document.getElementById('display')
-
-                switch (selected) {
-                    case '+':
-                        if (!operator) {
-                            if ((current.length !== 0) & (numeric.includes(current[current.length - 1]))) {
-                                operator = selected
-                            }
-                            else { alert(`Selection ${selected} not allowed`) }
-                        }
-                        else {
-                            if ((next.length !== 0) & (numeric.includes(next[next.length - 1]))) {
-
-                                calculate()
-
-                                if (result) {
-                                    text.textContent = parseFloat(result.toFixed(4))
-                                    current = result.toFixed(4)
-                                    operator = selected
-                                    next = []
-                                    result = null
-                                }
-                            }
-                            else { alert('Incomplete information') }
-                        }
-                        break
-                    case '-':
-                        if (!operator) {
-                            if (current.length === 0) {
-                                current.push(selected)
-                                const current_temp = current.join('')
-                                text.textContent = current_temp
-                            }
-                            else {
-                                if (numeric.includes(current[current.length - 1])) {
-                                    operator = selected
-                                }
-                                else { alert(`Selection ${selected} not allowed`) }
-                            }
-                        }
-                        else {
-                            if ((next.length !== 0) & (numeric.includes(next[next.length - 1]))) {
-
-                                calculate()
-
-                                if (result) {
-                                    text.textContent = parseFloat(result.toFixed(4))
-                                    current = result.toFixed(4)
-                                    operator = selected
-                                    next = []
-                                    result = null
-                                }
-                            }
-                            else { alert('Incomplete information') }
-                        }
-                        break
-                    case 'X':
-                        if (!operator) {
-                            if ((current.length !== 0) & (numeric.includes(current[current.length - 1]))) {
-                                operator = selected
-                            }
-                            else { alert(`Selection ${selected} not allowed`) }
-                        }
-                        else {
-                            if ((next.length !== 0) & (numeric.includes(next[next.length - 1]))) {
-
-                                calculate()
-
-                                if (result) {
-                                    text.textContent = parseFloat(result.toFixed(4))
-                                    current = result.toFixed(4)
-                                    operator = selected
-                                    next = []
-                                    result = null
-                                }
-                            }
-                            else { alert('Incomplete information') }
-                        }
-                        break
-                    case '/':
-                        if (!operator) {
-                            if ((current.length !== 0) & (numeric.includes(current[current.length - 1]))) {
-                                operator = selected
-                            }
-                            else { alert(`Selection ${selected} not allowed`) }
-                        }
-                        else {
-                            if ((next.length !== 0) & (numeric.includes(next[next.length - 1]))) {
-
-                                calculate()
-
-                                if (result) {
-                                    text.textContent = parseFloat(result.toFixed(4))
-                                    current = result.toFixed(4)
-                                    operator = selected
-                                    next = []
-                                    result = null
-                                }
-                            }
-                            else { alert('Incomplete information') }
-                        }
-                        break
-                    case '=':
-                        if ((next.length !== 0) & (numeric.includes(next[next.length - 1]))) {
-
-                            calculate()
-
-                            if (result) {
-                                text.textContent = parseFloat(result.toFixed(4))
-                                current = result.toFixed(4)
-                                operator = null
-                                next = []
-                                result = null
-                            }
-                        }
-                        else { alert('Incomplete information') }
-                        break
-                    case 'delete':
-                        if (!operator) {
-                            if (current.length !== 0) {
-                                current.pop()
-                                const current_temp = current.join('')
-                                text.textContent = current_temp
-                            }
-                            else { alert('Not Allowed') }
-                        }
-                        else {
-                            if (next.length !== 0) {
-                                next.pop()
-                                const next_temp = next.join('')
-                                text.textContent = next_temp
-                            }
-                            else { alert('Not Allowed') }
-                        }
-                        break
-                    case 'clear':
-                        current = []
-                        operator = null
-                        next = []
-                        result = null
-                        text.textContent = ''
-                        alert('Memory cleared')
-                        break
+            let secondValue = secondNumber.reduce((total, current) => {
+                if (current !== "%") {
+                    total = total + current
                 }
-            }
-        )
-    }
-)
-
-
-const others = Array.from(document.getElementsByClassName('other'))
-others.forEach(
-    other => {
-        other.addEventListener(
-            'click',
-            e => {
-                const selected = e.target.getAttribute('data')
-                const text = document.getElementById('display')
-
-                switch (selected) {
-                    case '.':
-
-                        const isNumber = !operator ? numeric.includes(current[current.length - 1]) : numeric.includes(next[next.length - 1])
-                        const notExist = !operator ? !current.includes(selected) : !next.includes(selected)
-
-                        if (!operator) {
-                            if ((isNumber) & (notExist)) {
-                                if (typeof (current) === 'object') {
-                                    current.push(selected)
-                                    const current_temp = current.join('')
-                                    text.textContent = current_temp
-                                }
-                                else { alert('Not Allowed') }
-                            }
-                            else { alert(`Selection ${selected} not allowed`) }
-                        }
-                        else {
-                            if ((isNumber) & (notExist)) {
-                                next.push(selected)
-                                const next_temp = next.join('')
-                                text.textContent = next_temp
-                            }
-                            else { alert(`Selection ${selected} not allowed`) }
-                        }
-                        break
-                    case '%':
-                        alert('Button disabled')
-                        break
+                else {
+                    total = Number(total) / 100
                 }
-            }
-        )
-    }
-)
 
-function calculate() {
-    function add() {
-        return current + next
-    }
+                return total;
+            }, "");
+    
+            answer = operate(firstValue, between, secondValue);
+    
+            const result = document.querySelector(".display.result");
+            const span = document.createElement('span');
+            span.textContent = answer;
+    
+            result.appendChild(span);
 
-    function subtract() {
-        return current - next
-    }
+        }
+        else {
+            alert("Missing inputs !!")
+        }
 
-    function multiply() {
-        return current * next
     }
-
-    function divide() {
-        return current / next
-    }
-
-    switch (operator) {
-        case '+':
-            current = (typeof (current) === 'object') ? parseFloat(current.join('')) : parseFloat(current)
-            next = parseFloat(next.join(''))
-            result = add()
-            break
-        case '-':
-            current = (typeof (current) === 'object') ? parseFloat(current.join('')) : parseFloat(current)
-            next = parseFloat(next.join(''))
-            result = subtract()
-            break
-        case 'X':
-            current = (typeof (current) === 'object') ? parseFloat(current.join('')) : parseFloat(current)
-            next = parseFloat(next.join(''))
-            result = multiply()
-            break
-        case '/':
-            if (parseFloat(next.join('')) !== 0) {
-                current = (typeof (current) === 'object') ? parseFloat(current.join('')) : parseFloat(current)
-                next = parseFloat(next.join(''))
-                result = divide()
-            }
-            else { alert(`Divide by 0 is not allowed`) }
-            break
-    }
-}
+);
